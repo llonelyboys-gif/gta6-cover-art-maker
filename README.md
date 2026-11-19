@@ -25,6 +25,9 @@ browser, completely offline. Your photos never leave your machine.
   Noir — plus film grain, vignette and a white poster frame.
 - **Fast export** — one click exports a PNG in **1080 × 1080**, **1080 × 1350** or
   **1920 × 1080**, or all three at once. Undo/redo and a "Surprise me" shuffle included.
+- **Deep-link views** — open a staged view directly with `?shot=editor`,
+  `?shot=cover`, `?shot=story`, or `?shot=wide` (handy for screenshots and
+  sharing a specific look).
 
 ## Try it
 
