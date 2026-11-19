@@ -1,0 +1,226 @@
+/* Neon Coast Cover Studio — editor chrome (my own design). */
+@font-face {
+  font-family: "Anton";
+  src: url("fonts/Anton-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pacifico";
+  src: url("fonts/Pacifico-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #12081f;
+  --bg2: #1c0f2e;
+  --card: #221338;
+  --card2: #2a1844;
+  --line: #3d2560;
+  --ink: #f5eefc;
+  --muted: #b9a3d6;
+  --pink: #ff2e88;
+  --orange: #ff7a18;
+  --cyan: #22d3ee;
+  --gold: #ffc93c;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: radial-gradient(1200px 600px at 80% -10%, #3b1155 0%, transparent 60%),
+              radial-gradient(900px 500px at 0% 0%, #4a1040 0%, transparent 55%),
+              var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+}
+
+/* ---------- top bar ---------- */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 14px 22px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(90deg, rgba(255,46,136,.14), rgba(255,122,24,.10) 55%, rgba(34,211,238,.10));
+  flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-mark {
+  width: 46px; height: 46px; border-radius: 12px; flex: none;
+  display: grid; place-items: center;
+  font-family: "Anton", sans-serif; font-size: 20px; letter-spacing: 1px;
+  color: #fff; background: linear-gradient(135deg, var(--pink), var(--orange) 60%, var(--gold));
+  box-shadow: 0 0 22px rgba(255,46,136,.55);
+}
+.brand h1 {
+  margin: 0; font-family: "Anton", sans-serif; font-weight: 400;
+  font-size: 26px; letter-spacing: 2px; text-transform: uppercase; line-height: 1;
+}
+.brand h1 span {
+  background: linear-gradient(90deg, var(--gold), var(--orange), var(--pink));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.tagline { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+.top-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- buttons ---------- */
+.btn {
+  appearance: none; border: 1px solid var(--line); background: var(--card2);
+  color: var(--ink); border-radius: 10px; padding: 9px 14px; cursor: pointer;
+  font: inherit; font-size: 14px; transition: transform .08s, box-shadow .15s, background .15s;
+}
+.btn:hover { background: #352058; box-shadow: 0 0 0 1px var(--pink) inset; }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: .45; cursor: default; box-shadow: none; }
+.btn.primary { background: linear-gradient(135deg, #7c2d12, #be185d); border-color: #ff2e88; }
+.btn.accent {
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  border-color: transparent; color: #fff; font-weight: 700;
+  box-shadow: 0 4px 22px rgba(255,46,136,.45);
+}
+.btn.ghost { background: transparent; }
+.btn.big { padding: 12px 18px; font-size: 15px; }
+.btn.small { padding: 7px 11px; font-size: 13px; }
+.file-btn { display: inline-block; }
+
+/* ---------- workspace ---------- */
+.workspace {
+  display: grid; grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 18px; padding: 18px 22px; align-items: start;
+  max-width: 1460px; margin: 0 auto;
+}
+@media (max-width: 980px) { .workspace { grid-template-columns: 1fr; } }
+
+.stage-col { min-width: 0; }
+.stage-toolbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-bottom: 10px; flex-wrap: wrap;
+}
+.size-picker { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.size-picker .lbl { color: var(--muted); font-size: 13px; margin-right: 4px; }
+.size-btn {
+  border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  border-radius: 9px; padding: 7px 11px; cursor: pointer; font: inherit; font-size: 13px;
+}
+.size-btn.active {
+  border-color: var(--pink); color: #fff;
+  background: linear-gradient(135deg, rgba(255,46,136,.35), rgba(255,122,24,.30));
+  box-shadow: 0 0 12px rgba(255,46,136,.35);
+}
+.stage-hint { color: var(--muted); font-size: 13px; }
+.stage {
+  position: relative; border-radius: var(--radius); overflow: hidden;
+  border: 1px solid var(--line);
+  background: checkerboard;
+  background-color: #0a0512;
+  box-shadow: 0 18px 50px rgba(0,0,0,.5);
+  display: grid; place-items: center;
+  min-height: 320px;
+}
+.stage canvas {
+  display: block; max-width: 100%; max-height: 68vh; width: auto; height: auto;
+  cursor: grab; touch-action: none;
+}
+.stage canvas.dragging { cursor: grabbing; }
+.stage-overlay {
+  position: absolute; inset: 0; pointer-events: none;
+  display: flex; align-items: flex-start; justify-content: flex-end; padding: 10px;
+}
+.stage-overlay .badge {
+  background: rgba(10,5,18,.72); border: 1px solid var(--line); color: var(--muted);
+  border-radius: 999px; padding: 5px 11px; font-size: 12px; backdrop-filter: blur(4px);
+}
+.export-row { display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+.export-note { color: var(--muted); font-size: 13px; }
+
+/* ---------- side panel ---------- */
+.panel-col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.card {
+  background: linear-gradient(180deg, var(--card), var(--bg2));
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px;
+}
+.card h2 { margin: 0 0 12px; font-size: 15px; letter-spacing: .4px; }
+.card h2::before {
+  content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink), var(--gold)); margin-right: 8px;
+}
+.hint { color: var(--muted); font-size: 12.5px; line-height: 1.5; margin: 10px 0 0; }
+.field { display: block; font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+.field input[type="text"], .field select {
+  display: block; width: 100%; margin-top: 5px; padding: 9px 11px;
+  background: #150a24; border: 1px solid var(--line); border-radius: 9px;
+  color: var(--ink); font: inherit; font-size: 14px;
+}
+.field input[type="text"]:focus, .field select:focus {
+  outline: none; border-color: var(--pink); box-shadow: 0 0 0 2px rgba(255,46,136,.35);
+}
+.field input[type="range"] { display: block; width: 100%; margin-top: 6px; accent-color: var(--pink); }
+.check { display: block; font-size: 13.5px; margin: 7px 0; cursor: pointer; }
+.check input { accent-color: var(--pink); margin-right: 7px; }
+
+.photo-library { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.photo-thumb {
+  position: relative; border: 2px solid transparent; border-radius: 10px; overflow: hidden;
+  padding: 0; cursor: pointer; background: #150a24; aspect-ratio: 1;
+}
+.photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-thumb.active { border-color: var(--pink); box-shadow: 0 0 14px rgba(255,46,136,.5); }
+.photo-thumb .thumb-name {
+  position: absolute; left: 0; right: 0; bottom: 0; font-size: 10px; padding: 3px 5px;
+  background: rgba(10,5,18,.75); color: #eee; text-align: left;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.photo-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+.layout-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.layout-btn {
+  border: 1px solid var(--line); background: #150a24; border-radius: 10px;
+  padding: 8px 4px 6px; cursor: pointer; color: var(--ink); font: inherit;
+}
+.layout-btn.active { border-color: var(--pink); box-shadow: 0 0 12px rgba(255,46,136,.4); background: #2a1445; }
+.layout-btn .mini { display: block; height: 44px; margin: 0 auto 5px; }
+.layout-btn .mini rect, .layout-btn .mini polygon { fill: url(#miniGrad); stroke: #fff; stroke-width: 1; }
+.layout-btn span { font-size: 11px; display: block; text-align: center; }
+
+.grade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+.grade-btn {
+  border: 2px solid transparent; border-radius: 10px; padding: 0; cursor: pointer;
+  overflow: hidden; background: #150a24; color: #fff; font: inherit; position: relative;
+}
+.grade-btn .swatch { display: block; height: 42px; position: static; }
+.grade-btn .grade-label { position: absolute; left: 0; right: 0; bottom: 0; font-size: 11px; padding: 3px 4px; background: rgba(0,0,0,.55); text-align: center; }
+.grade-btn.active { border-color: #fff; box-shadow: 0 0 14px rgba(255,255,255,.35); }
+
+.panel-info { font-size: 13.5px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+.panel-info b { color: var(--ink); }
+.panel-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- modal ---------- */
+.modal {
+  position: fixed; inset: 0; z-index: 50; display: grid; place-items: center;
+  background: rgba(8,3,16,.82); backdrop-filter: blur(6px); padding: 20px;
+}
+.modal[hidden] { display: none; }
+.modal-box {
+  background: var(--bg2); border: 1px solid var(--line); border-radius: 16px;
+  padding: 16px; max-width: min(92vw, 620px); max-height: 92vh; overflow: auto;
+  box-shadow: 0 24px 70px rgba(0,0,0,.6);
+}
+.modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.modal-head h2 { margin: 0; font-size: 17px; }
+.modal-box img { display: block; max-width: 100%; max-height: 62vh; margin: 0 auto; border-radius: 10px; border: 1px solid var(--line); }
+.modal-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+
+.foot { padding: 18px 22px 26px; color: var(--muted); font-size: 12.5px; text-align: center; line-height: 1.6; }
+
+/* Solo cover view used by ?shot=story / ?shot=wide: the app itself draws the
+   exported cover full-frame, no editor chrome. */
+body.solo { background: #0a0512; }
+body.solo .topbar, body.solo .workspace, body.solo .foot, body.solo .modal { display: none; }
+body.solo #soloStage { display: grid; place-items: center; min-height: 100vh; }
+body.solo #soloStage canvas { max-width: 100vw; max-height: 100vh; display: block; }
+#soloStage { display: none; }
